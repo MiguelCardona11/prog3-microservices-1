@@ -8,7 +8,10 @@ import com.mssecurity.mssecurity.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
+// CLASE 07/09/2023 (7)
+// Importaciones para cifrar las contraseñas del usuario
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 // Este decorador hace que nos conectemos a hacer pruebas de springboot desde la misma máquina (para que no de problemas de cross)
@@ -54,6 +57,9 @@ public class UsersController {
     // Voy a devolver un User, viene un parametro con un Generic (el va a fijarse en
     // el pedazo "body" del JSON, y lo casteamos en el formato de la clase User)
     public User store(@RequestBody User newUser) {
+        // CLASE 07/09/2023 (7) (implementacion de cifrado)
+        newUser.setPassword(this.convertirSHA256(newUser.getPassword()));
+
         // le digo al repositorio que me guarde el usuario, y este lo guarda en Mongo
         return this.theUserRepository.save(newUser);
         // Automáticamente lo retorna en formato JSON.
@@ -94,7 +100,8 @@ public class UsersController {
             // el body
             theActualUser.setName(theNewUser.getName());
             theActualUser.setEmail(theNewUser.getEmail());
-            theActualUser.setPassword(theNewUser.getPassword());
+            // CLASE 07/09/2023 (7) ciframos la contraseña
+            theActualUser.setPassword(this.convertirSHA256(theNewUser.getPassword()));
             // Le digo al repositorio que vuelva a guardar al TheActualUser. (que se
             // actualice)
             return this.theUserRepository.save(theActualUser);
@@ -161,5 +168,24 @@ public class UsersController {
         } else {
             return null;
         }
+    }
+
+    // CLASE 07/09/2023 (7)
+    // Implementación de cifrado SHA-256 para la contraseña de los usuarios.
+    public String convertirSHA256(String password) {
+        MessageDigest md = null;
+        try {
+            md = MessageDigest.getInstance("SHA-256");
+        }
+        catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            return null;
+        }
+        byte[] hash = md.digest(password.getBytes());
+        StringBuffer sb = new StringBuffer();
+        for(byte b : hash) {
+            sb.append(String.format("%02x", b));
+        }
+        return sb.toString();
     }
 }
