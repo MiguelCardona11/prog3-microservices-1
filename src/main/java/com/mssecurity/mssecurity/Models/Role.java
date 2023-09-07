@@ -1,4 +1,4 @@
-package Models;
+package com.mssecurity.mssecurity.Models;
 
 // Agregamos decoradores
 import lombok.Data;

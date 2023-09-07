@@ -1,7 +1,10 @@
-package Controllers;
+package com.mssecurity.mssecurity.Controllers;
 
-import Models.User;
-import Repositories.UserRepository;
+// Importo la clase Role (CLASE 6)
+import com.mssecurity.mssecurity.Models.Role;
+import com.mssecurity.mssecurity.Models.User;
+import com.mssecurity.mssecurity.Repositories.RoleRepository;
+import com.mssecurity.mssecurity.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +27,10 @@ public class UsersController {
     // hacemos referencia (para heredar sus métodos) en el reposiroty de Mongo a
     // MySQL por ejemplo, no afectará acá al controlador.
     private UserRepository theUserRepository;
+
+    // Añadimos el RolRepository (CLASE 6)
+    @Autowired
+    private RoleRepository theRoleRepository;
 
     // Método GET
     // Se va a activar cuando el cliente use un GET
@@ -115,4 +122,44 @@ public class UsersController {
         }
     }
 
+    // CLASE 05/09/2023 (6)
+    // Creación dle endpoint para asociarle un rol a un usuario.
+
+    // Lo hacemos con un PUT
+    // Lo que está en llaves es pq es un valor que peude cambiar que ponemos.
+    @PutMapping("{user_id}/role/{role_id}")
+    // Necesito 2 variables que vienen en el path
+    public User matchUserRole(@PathVariable String user_id,
+                              @PathVariable String role_id) {
+        // Necesito saber que el usuario y el rol existen
+        User theActualUser=this.theUserRepository.findById(user_id).orElse(null);
+        Role theActualRole=this.theRoleRepository.findById(role_id).orElse(null);
+
+        // Si existen
+        if(theActualUser != null && theActualRole != null){
+            // Le agrego el rol al objeto de users
+            theActualUser.setRole(theActualRole);
+            // Guardo en la base de datos
+            return this.theUserRepository.save(theActualUser);
+        } else {
+            return null;
+        }
+    }
+
+    // Sería un PUT pq vamos a actualizar esta asociación.
+    // identificamos el usuario y el rol que le vamos a quitar.
+    @PutMapping("{user_id}/role")
+    public User unMatchUserRole(@PathVariable String user_id) {
+        // COmprobamos que exista
+        User theActualUser=this.theUserRepository.findById(user_id).orElse(null);
+        // Si existe
+        if(theActualUser != null){
+            // Le ponemos el rol en null
+            theActualUser.setRole(null);
+            // Guardamos en la base de datos.
+            return this.theUserRepository.save(theActualUser);
+        } else {
+            return null;
+        }
+    }
 }

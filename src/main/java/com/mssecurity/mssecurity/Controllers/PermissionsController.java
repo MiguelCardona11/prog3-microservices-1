@@ -1,8 +1,9 @@
-package Controllers;
+package com.mssecurity.mssecurity.Controllers;
 
-import Repositories.PermissionRepository;
-import Models.Permission;
+import com.mssecurity.mssecurity.Repositories.PermissionRepository;
+import com.mssecurity.mssecurity.Models.Permission;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

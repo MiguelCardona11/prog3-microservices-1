@@ -1,7 +1,7 @@
-package Repositories;
+package com.mssecurity.mssecurity.Repositories;
 
 // import Models.Role;
-import Models.RolePermission;
+import com.mssecurity.mssecurity.Models.RolePermission;
 // import Models.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
