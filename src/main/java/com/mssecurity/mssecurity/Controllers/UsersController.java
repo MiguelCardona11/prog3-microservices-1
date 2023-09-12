@@ -5,11 +5,15 @@ import com.mssecurity.mssecurity.Models.Role;
 import com.mssecurity.mssecurity.Models.User;
 import com.mssecurity.mssecurity.Repositories.RoleRepository;
 import com.mssecurity.mssecurity.Repositories.UserRepository;
+import com.mssecurity.mssecurity.Services.EncryptionService;
+import com.mssecurity.mssecurity.Services.JwtService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 // CLASE 07/09/2023 (7)
 // Importaciones para cifrar las contraseñas del usuario
+import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
@@ -35,6 +39,10 @@ public class UsersController {
     @Autowired
     private RoleRepository theRoleRepository;
 
+    // CLASE 07/09/2023 (8) ahora en vez de tener el metodo de encripcion en la misma clase, la traemos el servicio
+    @Autowired
+    private EncryptionService encryptionService;
+
     // Método GET
     // Se va a activar cuando el cliente use un GET
     @GetMapping("")
@@ -58,7 +66,7 @@ public class UsersController {
     // el pedazo "body" del JSON, y lo casteamos en el formato de la clase User)
     public User store(@RequestBody User newUser) {
         // CLASE 07/09/2023 (7) (implementacion de cifrado)
-        newUser.setPassword(this.convertirSHA256(newUser.getPassword()));
+        newUser.setPassword(encryptionService.convertirSHA256(newUser.getPassword()));
 
         // le digo al repositorio que me guarde el usuario, y este lo guarda en Mongo
         return this.theUserRepository.save(newUser);
@@ -101,7 +109,7 @@ public class UsersController {
             theActualUser.setName(theNewUser.getName());
             theActualUser.setEmail(theNewUser.getEmail());
             // CLASE 07/09/2023 (7) ciframos la contraseña
-            theActualUser.setPassword(this.convertirSHA256(theNewUser.getPassword()));
+            theActualUser.setPassword(encryptionService.convertirSHA256(theNewUser.getPassword()));
             // Le digo al repositorio que vuelva a guardar al TheActualUser. (que se
             // actualice)
             return this.theUserRepository.save(theActualUser);
@@ -170,22 +178,4 @@ public class UsersController {
         }
     }
 
-    // CLASE 07/09/2023 (7)
-    // Implementación de cifrado SHA-256 para la contraseña de los usuarios.
-    public String convertirSHA256(String password) {
-        MessageDigest md = null;
-        try {
-            md = MessageDigest.getInstance("SHA-256");
-        }
-        catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-            return null;
-        }
-        byte[] hash = md.digest(password.getBytes());
-        StringBuffer sb = new StringBuffer();
-        for(byte b : hash) {
-            sb.append(String.format("%02x", b));
-        }
-        return sb.toString();
-    }
 }

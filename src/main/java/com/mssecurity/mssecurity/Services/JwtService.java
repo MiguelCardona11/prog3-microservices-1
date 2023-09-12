@@ -19,6 +19,7 @@ public class JwtService {
     @Value("${jwt.secret}")
     private String secret; // Esta es la clave secreta que se utiliza para firmar el
     //token. Debe mantenerse segura.
+    // el valor de "expiration" lo saco del archivo application.properties
     @Value("${jwt.expiration}")
     private Long expiration; // Tiempo de expiración del token en milisegundos.
     // Creo la secret key
