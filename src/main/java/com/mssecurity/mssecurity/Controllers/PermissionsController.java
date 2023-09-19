@@ -10,7 +10,8 @@ import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/permissions")
+// CLASE 14/09/2023 (9): cambiamos la ruta de ("/permissions") a ("api/permissions")
+@RequestMapping("api/permissions")
 
 public class PermissionsController {
     @Autowired

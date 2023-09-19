@@ -14,7 +14,8 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/role-permission")
+// CLASE 14/09/2023 (9): cambiamos la ruta de ("/role-permission") a ("api/role-permission")
+@RequestMapping("api/role-permission")
 
 public class RolePermissionsController {
     @Autowired

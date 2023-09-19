@@ -23,7 +23,8 @@ import java.util.List;
 // Este decorador permite usar los CRUD
 @RestController
 // Los metodos de esta clase se van a activar cuando el usuario ponga en la ruta
-@RequestMapping("/users")
+// CLASE 14/09/2023 (9): cambiamos la ruta de ("/users") a ("api/users")
+@RequestMapping("api/users")
 
 public class UsersController {
     // Necesito una referencia a userRepository
@@ -39,7 +40,7 @@ public class UsersController {
     @Autowired
     private RoleRepository theRoleRepository;
 
-    // CLASE 07/09/2023 (8) ahora en vez de tener el metodo de encripcion en la misma clase, la traemos el servicio
+    // CLASE 12/09/2023 (8) ahora en vez de tener el metodo de encripcion en la misma clase, la traemos el servicio
     @Autowired
     private EncryptionService encryptionService;
 

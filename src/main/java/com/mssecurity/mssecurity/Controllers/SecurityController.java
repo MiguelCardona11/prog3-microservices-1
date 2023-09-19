@@ -12,7 +12,9 @@ import java.io.IOException;
 
 @CrossOrigin
 @RestController
-@RequestMapping("security")
+// CLASE 14/09/2023 (9): cambiamos la ruta de ("security") a ("api/public/security")
+// este controller es el único que queda con el "public" ya que este no pasará por el interceptor, ya que en el login aun no se tiene un token, ya que apenas se crea acá.
+@RequestMapping("api/public/security")
 public class SecurityController {
 
     // Necesitamos el repositorio de usuarios
@@ -31,7 +33,7 @@ public class SecurityController {
      // CLASE 12/09/2023 (8) Implementación del login manual.
      // usamos el método POST
      // accedo a este método mediante la ruta /login
-     @PostMapping("/login")
+     @PostMapping("login")
      // el "final" es para poder usar la respuesta HTTP 401 que es el error por si se equivocan en el login
      // levantamos la excepción de errores con el throws IOException (para implementarlo en el else de mas adelante)
      public String login(@RequestBody User theUser, final HttpServletResponse response) throws IOException {

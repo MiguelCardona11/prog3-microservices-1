@@ -10,7 +10,8 @@ import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/roles")
+// CLASE 14/09/2023 (9): cambiamos la ruta de ("/roles") a ("api/roles")
+@RequestMapping("api/roles")
 
 public class RolesController {
     @Autowired
