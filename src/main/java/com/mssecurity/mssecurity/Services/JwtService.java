@@ -64,4 +64,29 @@ public class JwtService {
             return false;
         }
     }
+
+    // CLASE 21/09/2023 (11)
+    // funcion getuserfromtoken...
+    // hacer un setter de id para user y un constructor vacío para user
+    public User getUserFromToken(String token) {
+        try {
+            Jws<Claims> claimsJws = Jwts.parserBuilder()
+                    .setSigningKey(secretKey)
+                    .build()
+                    .parseClaimsJws(token);
+
+            Claims claims = claimsJws.getBody();
+
+            // sse usa un constructor vacio en la clase User
+            User user = new User();
+            // Se crea un setter en clase User
+            user.set_id((String) claims.get("_id"));
+            user.setName((String) claims.get("name"));
+            user.setEmail((String) claims.get("email"));
+            return user;
+        } catch (Exception e) {
+            // En caso de que el token sea inválido o haya expirado
+            return null;
+        }
+    }
 }

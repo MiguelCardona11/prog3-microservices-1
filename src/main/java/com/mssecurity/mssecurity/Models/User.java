@@ -18,6 +18,10 @@ public class User {
     @DBRef
     private Role role;
 
+    // CLASE 21/09/2023 (11): Se crea constructor vacio
+    public User(){
+    }
+
     public User(String name, String email, String password) {
         this.name = name;
         this.email = email;
@@ -26,6 +30,11 @@ public class User {
 
     public String get_id() {
         return _id;
+    }
+
+    // CLASE 21/09/2023 (11): Se crea setter de id
+    public void set_id(String _id) {
+        this._id = _id;
     }
 
     public String getName() {

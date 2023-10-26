@@ -1,9 +1,13 @@
 package com.mssecurity.mssecurity.Controllers;
 
+import com.mssecurity.mssecurity.Models.Message;
+import com.mssecurity.mssecurity.Models.Permission;
 import com.mssecurity.mssecurity.Models.User;
 import com.mssecurity.mssecurity.Repositories.UserRepository;
 import com.mssecurity.mssecurity.Services.EncryptionService;
 import com.mssecurity.mssecurity.Services.JwtService;
+import com.mssecurity.mssecurity.Services.ValidatorsService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +33,13 @@ public class SecurityController {
      @Autowired
      private EncryptionService encryptionService;
 
+    // CLASE 24/10/2023 (19)
+     @Autowired
+     private ValidatorsService validatorService;
+
+     //CLASE 19/10/2023 (18)
+     private static final String BEARER_PREFIX = "Bearer ";
+
      // Método login
      // CLASE 12/09/2023 (8) Implementación del login manual.
      // usamos el método POST
@@ -52,8 +63,25 @@ public class SecurityController {
              response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
          }
          return token;
+
+
      }
-     // Método logout
-     // Método reset pass
+
+    // CLASE 24/10/2023 (19)
+    //Método logout
+    //Método reset pass
+    @GetMapping("token-validation")
+    public User tokenValidation(final HttpServletRequest request) {
+        User theUser=this.validatorService.getUser(request);
+        return theUser;
+    }
+
+    // ofrece servicio para verificar el rolePermission
+    @PostMapping("permissions-validation")
+    public boolean permissionsValidation(final HttpServletRequest request,@RequestBody Permission thePermission) {
+        boolean success=this.validatorService.validationRolePermission(request,thePermission.getUrl(),thePermission.getMethod());
+        return success;
+    }
+
 }
 

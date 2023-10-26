@@ -139,7 +139,7 @@ public class UsersController {
     }
 
     // CLASE 05/09/2023 (6)
-    // Creación dle endpoint para asociarle un rol a un usuario.
+    // Creación dle endpoint para asociarle un rol a un usuario (match)
 
     // Lo hacemos con un PUT
     // Lo que está en llaves es pq es un valor que peude cambiar que ponemos.
@@ -162,6 +162,7 @@ public class UsersController {
         }
     }
 
+    // Desasociar  (unmatch)
     // Sería un PUT pq vamos a actualizar esta asociación.
     // identificamos el usuario y el rol que le vamos a quitar.
     @PutMapping("{user_id}/role")
